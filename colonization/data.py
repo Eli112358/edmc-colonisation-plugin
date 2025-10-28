@@ -22,12 +22,14 @@ class Commodity:
 
 
 class TableEntry:
-    def __init__(self, commodity:Commodity, demand:int, cargo:int, carrier:int, available:bool):
+    def __init__(self, commodity:Commodity, demand:int, cargo:int, carrier:int, available:bool, cr_ton:int, cr_trip:int):
         self.commodity = commodity
         self.demand = demand
         self.cargo = cargo
         self.carrier = carrier
         self.available = available
+        self.cr_ton = cr_ton
+        self.cr_trip = cr_trip
 
     def category(self):
         return self.commodity.category

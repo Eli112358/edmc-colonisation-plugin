@@ -8,6 +8,7 @@ from config import config as edmc_config
 PREFIX="colonization."
 
 class Config(Enum):
+    CALC_PROFITS = f"{PREFIX}calcProfits", bool, True
     IGNORE_FC_UPDATE=f"{PREFIX}ignoreFCUpdate", bool, True
     SHOW_STATION_NAME = f"{PREFIX}showStationName", bool, True
     SHOW_TOTALS = f"{PREFIX}showTotals", bool, True

@@ -35,6 +35,7 @@ class ColonizationPlugin:
         self.dockedConstruction = False
         self.markets: dict[str, list[str]] = {}
         self.currentMarketId = None
+        self.profits: dict[str, list[int]] = {}
         logger.debug("initialized")
 
     def plugin_start3(self, plugin_dir: str) -> None:
@@ -186,13 +187,26 @@ class ColonizationPlugin:
         needed = self.currentConstruction.required if self.currentConstruction else self.get_total_shopping_list()
         table: list[TableEntry] = []
         local_commodities: list[str] = self.markets.get(self.currentMarketId, []) if self.currentMarketId else []
+        calc_profits = Config.CALC_PROFITS.get()
         for commodity, required in needed.items():
+            not_in_profits = commodity not in self.profits
+            instance_of_resource = isinstance(required, ConstructionResource)
+            in_local = commodity in local_commodities
+            if calc_profits:
+                if not_in_profits:
+                    self.profits[commodity] = [0, 0]
+                if instance_of_resource and in_local:
+                    self.profits[commodity][0] = required.payment - local_commodities[commodity]
+                    self.profits[commodity][1] = self.profits[commodity][0] * min(self.maxcargo, required.needed())
+            profits = self.profits.get(commodity, [None, None])
             table.append(TableEntry(
                 commodity=self.commodityMap[commodity],
                 demand=required.needed() if isinstance(required, ConstructionResource) else required,
                 cargo=self.cargo.get(commodity, 0),
                 carrier=self.carrier.get(commodity),
-                available=commodity in local_commodities
+                available=commodity in local_commodities,
+                cr_ton=profits[0],
+                cr_trip=profits[1],
             ))
         return table
 

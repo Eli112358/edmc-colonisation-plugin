@@ -24,6 +24,7 @@ class PreferencesUi:
         self.frame: Optional[ttk.Frame] = None
         self.fc_callsign: Optional[tk.Label] = None
         self.fc_last_update: Optional[tk.Label] = None
+        self.calc_profits: Optional[tk.Variable] = None
         self.construction_list: Optional[ttk.Frame] = None
         self.ignore_fc_update: Optional[tk.Variable] = None
         self.show_station_name: Optional[tk.Variable] = None
@@ -59,6 +60,10 @@ class PreferencesUi:
 
         self.show_totals = Config.SHOW_TOTALS.tk_var()
         nb.Checkbutton(self.frame, text=ptl("Show totals line"), variable=self.show_totals).grid(
+            row=self.next_row(), sticky=tk.W, padx=self.PAD_X)
+
+        self.calc_profits = Config.CALC_PROFITS.tk_var()
+        nb.Checkbutton(self.frame, text=ptl("Calculate profits"), variable=self.calc_profits).grid(
             row=self.next_row(), sticky=tk.W, padx=self.PAD_X)
 
         self.var_categories = Config.CATEGORIES.tk_var()
@@ -147,6 +152,8 @@ class PreferencesUi:
             Config.SHOW_TOTALS.set(self.show_totals.get())
         if self.show_station_name:
             Config.SHOW_STATION_NAME.set(self.show_station_name.get())
+        if self.calc_profits:
+            Config.CALC_PROFITS.set(self.calc_profits.get())
 
         self.plugin.update_language()
         self.plugin.update_display()

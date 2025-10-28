@@ -137,6 +137,8 @@ class MainUi:
         tk.Label(self.table_frame, text=ptl("Demand")).grid(row=0, column=2, sticky=tk.E)
         tk.Label(self.table_frame, text=ptl("Carrier")).grid(row=0, column=3, sticky=tk.E)
         tk.Label(self.table_frame, text=ptl("Cargo")).grid(row=0, column=4, sticky=tk.E)
+        tk.Label(self.table_frame, text=ptl("Cr/Ton")).grid(row=0, column=5, sticky=tk.E)
+        tk.Label(self.table_frame, text=ptl("Cr/Trip")).grid(row=0, column=6, sticky=tk.E)
 
         fontDefault = ("Tahoma", 9, "normal")
         fontMono = ("Tahoma", 9, "normal")
@@ -149,7 +151,9 @@ class MainUi:
                 'buy': tk.Label(self.table_frame, anchor=tk.E, font=fontMono),
                 'demand': tk.Label(self.table_frame, anchor=tk.E, font=fontMono),
                 'cargo': tk.Label(self.table_frame, anchor=tk.E, font=fontMono),
-                'carrier': tk.Label(self.table_frame, anchor=tk.E, font=fontMono)
+                'carrier': tk.Label(self.table_frame, anchor=tk.E, font=fontMono),
+                'cr_ton': tk.Label(self.table_frame, anchor=tk.E, font=fontMono),
+                'cr_trip': tk.Label(self.table_frame, anchor=tk.E, font=fontMono),
             }
             labels['name'].grid_configure(sticky=tk.W)
             for label in labels.values():
@@ -237,6 +241,8 @@ class MainUi:
         self.rows[row]['name'].grid(row=row+1, column=0)
         self.rows[row]['cargo'].grid_remove()
         self.rows[row]['carrier'].grid_remove()
+        self.rows[row]['cr_ton'].grid_remove()
+        self.rows[row]['cr_trip'].grid_remove()
         self.rows[row]['name'].grid(row=row+1, column=0)
         if cc.collapsed != CollapseMode.EXPANDED:
             self.rows[row]['demand']['text'] = '{:8,d}'.format(cc.unload())
@@ -257,12 +263,16 @@ class MainUi:
         self.rows[row]['cargo']['text'] = '{:8,d}'.format(i.cargo)
         self.rows[row]['carrier']['text'] = '{:8,d}'.format(i.carrier)
         self.rows[row]['buy']['text'] = '{:8,d}'.format(i.buy())
+        self.rows[row]['cr_ton']['text'] = '{:8,d}'.format(i.cr_ton)
+        self.rows[row]['cr_trip']['text'] = '{:8,d}'.format(i.cr_trip)
 
         self.rows[row]['name'].grid(row=row+1, column=0)
         self.rows[row]['buy'].grid(row=row + 1, column=1)
         self.rows[row]['demand'].grid(row=row+1, column=2)
         self.rows[row]['cargo'].grid(row=row+1, column=3)
         self.rows[row]['carrier'].grid(row=row+1, column=4)
+        self.rows[row]['cr_ton'].grid(row=row+1, column=5)
+        self.rows[row]['cr_trip'].grid(row=row+1, column=6)
 
         if i.buy() <= 0:
             self.rows[row]['name']['fg'] = 'green'
@@ -270,6 +280,8 @@ class MainUi:
             self.rows[row]['demand']['fg'] = 'green'
             self.rows[row]['cargo']['fg'] = 'green'
             self.rows[row]['carrier']['fg'] = 'green'
+            self.rows[row]['cr_ton']['fg'] = 'green'
+            self.rows[row]['cr_trip']['fg'] = 'green'
         else:
             fg_color = theme.current['foreground'] if theme.current else 'black'
             if i.available:
@@ -281,6 +293,8 @@ class MainUi:
             self.rows[row]['cargo']['fg'] = fg_color
             self.rows[row]['carrier']['fg'] = fg_color
             self.rows[row]['buy']['fg'] = fg_color
+            self.rows[row]['cr_ton']['fg'] = fg_color
+            self.rows[row]['cr_trip']['fg'] = fg_color
 
 
     def set_table(self, table: list[TableEntry], docked, isTotal: bool):
